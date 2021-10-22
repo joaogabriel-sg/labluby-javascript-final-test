@@ -22,6 +22,8 @@
 .logo {
   position: relative;
   height: 100%;
+
+  padding-left: 1.2rem;
   margin-right: 6.4rem;
 
   font-size: 4.4rem;
@@ -35,14 +37,14 @@
 .logo::after {
   content: "";
   background: #b5c401;
-  width: calc(100% + 2rem);
+  width: calc(100% + 1.2rem);
   height: 0.7rem;
   border-radius: 4rem;
 
   position: absolute;
   bottom: calc(-0.7rem / 2);
   left: -50%;
-  transform: translateX(calc(50% - 2rem));
+  transform: translateX(calc(50% - 0.8rem));
 }
 
 .menu {

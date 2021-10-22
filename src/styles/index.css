@@ -1,2 +1,6 @@
-@import "./main.css";
+@import "./general.css";
 @import "./header.css";
+@import "./main.css";
+@import "./game.css";
+@import "./cart.css";
+@import "./footer.css";
