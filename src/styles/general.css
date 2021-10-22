@@ -1,0 +1,45 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+*,
+button {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 10px;
+}
+
+html,
+body,
+#app {
+  background: #f7f7f7;
+  min-height: 100vh;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+}
+
+.primary-title {
+  margin: 3.2rem 0;
+
+  font-size: 2.4rem;
+  font-weight: 300;
+  font-style: italic;
+  text-transform: uppercase;
+  color: #707070;
+}
+
+.primary-title > strong {
+  font-size: inherit;
+  font-weight: 700;
+}
+
+.secondary-title {
+  font-size: 1.7rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #868686;
+}

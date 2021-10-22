@@ -1,0 +1,15 @@
+.footer-container {
+  height: 8rem;
+  border-top: 2px solid #ebebeb;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.footer__copy {
+  font-size: 1.5rem;
+  color: #707070;
+}
