@@ -15,14 +15,12 @@
 
     const ajax = new XMLHttpRequest();
 
-    let allGames = null;
+    const classGameTypeSelected = "game-type__selected";
+    const classGameNumberSelected = "game-number__selected";
+
+    let games = null;
     let selectedGame = null;
-
     let selectedNumbers = [];
-
-    function getSelectedGameTypeData(gameType) {
-      return allGames.find((game) => game.type === gameType);
-    }
 
     function handleCompleteGame() {
       while (selectedNumbers.length < selectedGame["max-number"]) {
@@ -37,99 +35,88 @@
       }
 
       const $allGameButtons = dqsa('[data-js="game-number"]');
-
-      $allGameButtons.forEach((button) => {
-        if (selectedNumbers.includes(button.value)) {
-          button.style = `background: ${selectedGame.color};`;
-          button.classList.add("game-number__selected");
-
-          button.removeEventListener("click", handleSelectNumber);
-          button.addEventListener("click", handleDeselectNumber, false);
-          return;
-        }
-
-        button.style = `background: #adc0c4;`;
-        button.classList.remove("game-number__selected");
-
-        button.removeEventListener("click", handleDeselectNumber);
-        button.addEventListener("click", handleSelectNumber, false);
-      });
+      $allGameButtons.forEach((button) =>
+        selectedNumbers.includes(button.value)
+          ? manageButtonNumberEventListeners(button, false)
+          : manageButtonNumberEventListeners(button, true)
+      );
     }
 
     function handleClearGame() {
       selectedNumbers = [];
 
-      const $allSelectedButtons = dqsa(".game-number__selected");
-
-      $allSelectedButtons.forEach((selectedButton) => {
-        selectedButton.style = `background: #adc0c4;`;
-        selectedButton.classList.remove("game-number__selected");
-
-        selectedButton.removeEventListener("click", handleDeselectNumber);
-        selectedButton.addEventListener("click", handleSelectNumber, false);
-      });
+      const $allSelectedButtons = dqsa(`.${classGameNumberSelected}`);
+      $allSelectedButtons.forEach((selectedButton) =>
+        manageButtonNumberEventListeners(selectedButton, true)
+      );
     }
 
-    function handleDeselectNumber(event) {
+    function handleDeselectGameNumber(event) {
       const $deselectedButtonNumber = event.target;
-      const deselectedNumber = $deselectedButtonNumber.value;
-
-      $deselectedButtonNumber.classList.remove("game-number__selected");
-      $deselectedButtonNumber.style = `background: #adc0c4;`;
-
       selectedNumbers = selectedNumbers.filter(
-        (number) => number !== deselectedNumber
+        (number) => number !== $deselectedButtonNumber.value
       );
 
-      $deselectedButtonNumber.removeEventListener(
-        "click",
-        handleDeselectNumber
-      );
-      $deselectedButtonNumber.addEventListener(
-        "click",
-        handleSelectNumber,
-        false
-      );
+      manageButtonNumberEventListeners($deselectedButtonNumber, true);
     }
 
-    function handleSelectNumber(event) {
-      if (selectedNumbers.length + 1 <= selectedGame["max-number"]) {
-        const $selectedButtonNumber = event.target;
-        const selectedNumber = $selectedButtonNumber.value;
+    function handleSelectGameNumber(event) {
+      const selectedNumbersLength = selectedNumbers.length + 1;
+      const selectedGameTypeMaxNumber = selectedGame["max-number"];
 
-        $selectedButtonNumber.classList.add("game-number__selected");
-        $selectedButtonNumber.style = `background: ${selectedGame.color};`;
+      if (selectedNumbersLength > selectedGameTypeMaxNumber) return;
 
-        selectedNumbers.push(selectedNumber);
+      const $selectedButtonNumber = event.target;
+      selectedNumbers.push($selectedButtonNumber.value);
 
-        $selectedButtonNumber.removeEventListener("click", handleSelectNumber);
-        $selectedButtonNumber.addEventListener(
-          "click",
-          handleDeselectNumber,
-          false
-        );
+      manageButtonNumberEventListeners($selectedButtonNumber, false);
+    }
+
+    function removeClassGameNumberSelected(button) {
+      button.classList.remove(classGameNumberSelected);
+      button.style = `background: #adc0c4;`;
+    }
+
+    function addClassGameNumberSelected(button) {
+      button.classList.add(classGameNumberSelected);
+      button.style = `background: ${selectedGame.color};`;
+    }
+
+    function manageButtonNumberEventListeners(button, isItToSelect = true) {
+      if (isItToSelect) {
+        removeClassGameNumberSelected(button);
+        button.removeEventListener("click", handleDeselectGameNumber);
+        button.addEventListener("click", handleSelectGameNumber, false);
+        return;
       }
+
+      addClassGameNumberSelected(button);
+      button.removeEventListener("click", handleSelectGameNumber);
+      button.addEventListener("click", handleDeselectGameNumber, false);
+    }
+
+    function handleRenderGameNumber(number) {
+      const $listItem = doc.createElement("li");
+
+      const $numberButton = doc.createElement("button");
+      $numberButton.classList.add("game-number");
+      $numberButton.setAttribute("type", "button");
+      $numberButton.setAttribute("data-js", "game-number");
+      $numberButton.value = number;
+      $numberButton.textContent = number;
+      manageButtonNumberEventListeners($numberButton, true);
+
+      $listItem.appendChild($numberButton);
+      $gameNumbers.appendChild($listItem);
     }
 
     function renderGameNumbers() {
       $gameNumbers.textContent = "";
 
-      Array.from({ length: selectedGame.range }).forEach((_, index) => {
-        const number = `${index + 1}`.padStart(2, "0");
-
-        const $listItem = doc.createElement("li");
-
-        const $numberButton = doc.createElement("button");
-        $numberButton.setAttribute("type", "button");
-        $numberButton.setAttribute("data-js", "game-number");
-        $numberButton.classList.add("game-number");
-        $numberButton.value = number;
-        $numberButton.textContent = number;
-        $numberButton.addEventListener("click", handleSelectNumber, false);
-
-        $listItem.appendChild($numberButton);
-        $gameNumbers.appendChild($listItem);
-      });
+      const range = selectedGame.range;
+      Array.from({ length: range }, (_, index) =>
+        `${index + 1}`.padStart(2, "0")
+      ).forEach(handleRenderGameNumber);
     }
 
     function renderGameDescription() {
@@ -140,26 +127,33 @@
       $gameName.textContent = selectedGame.type;
     }
 
-    function handleChangeSelectedGameType(event) {
-      const clickedGameType = event.target.value;
-      const $buttonsGamesType = dqsa('[data-js="game-type"]');
-      const selectedClassName = "game-type__selected";
-
-      $buttonsGamesType.forEach((button) => {
-        if (button.classList.contains(selectedClassName))
-          button.classList.remove(selectedClassName);
-
-        if (button.value === clickedGameType) {
-          selectedGame = getSelectedGameTypeData(clickedGameType);
-          button.classList.add(selectedClassName);
-        }
-      });
-
+    function initGame() {
       selectedNumbers = [];
 
       renderGameName();
       renderGameDescription();
       renderGameNumbers();
+    }
+
+    function getSelectedGameDataByType(gameType) {
+      return games.find(({ type }) => type === gameType);
+    }
+
+    function handleChangeSelectedGameType(event) {
+      const gameType = event.target.value;
+      const $buttonsTypesOfGames = dqsa('[data-js="game-type"]');
+
+      $buttonsTypesOfGames.forEach((buttonGameType) => {
+        if (buttonGameType.classList.contains(classGameTypeSelected))
+          buttonGameType.classList.remove(classGameTypeSelected);
+
+        if (buttonGameType.value === gameType) {
+          selectedGame = getSelectedGameDataByType(gameType);
+          buttonGameType.classList.add(classGameTypeSelected);
+        }
+      });
+
+      initGame();
     }
 
     function makeGameTypeButton(type) {
@@ -175,21 +169,22 @@
       return $button;
     }
 
-    function renderGamesType(gamesTypes) {
-      allGames = gamesTypes;
+    function handleRenderGameType(game, index) {
+      const $listItemGameType = doc.createElement("li");
+      const $buttonGameType = makeGameTypeButton(game.type);
 
-      gamesTypes.forEach((gameType, index) => {
-        const $listItem = doc.createElement("li");
-        const $buttonGameType = makeGameTypeButton(gameType.type);
+      if (index === 0) {
+        selectedGame = getSelectedGameDataByType(game.type);
+        $buttonGameType.classList.add(classGameTypeSelected);
+      }
 
-        if (index === 0) {
-          selectedGame = getSelectedGameTypeData(gameType.type);
-          $buttonGameType.classList.add("game-type__selected");
-        }
+      $listItemGameType.appendChild($buttonGameType);
+      $gamesType.appendChild($listItemGameType);
+    }
 
-        $listItem.appendChild($buttonGameType);
-        $gamesType.appendChild($listItem);
-      });
+    function renderTypesOfGames(typesOfGames) {
+      games = typesOfGames;
+      games.forEach(handleRenderGameType);
     }
 
     function isRequestOk() {
@@ -197,29 +192,27 @@
     }
 
     function handleGetGamesData() {
-      if (isRequestOk()) {
-        const data = JSON.parse(ajax.responseText);
+      if (!isRequestOk()) return;
 
-        renderGamesType(data.types);
-        renderGameName();
-        renderGameDescription();
-        renderGameNumbers();
-        return;
-      }
+      const data = JSON.parse(ajax.responseText);
+      renderTypesOfGames(data.types);
+      initGame();
     }
 
     function getGamesData() {
       ajax.open("GET", "../../games.json");
       ajax.send();
-
       ajax.addEventListener("readystatechange", handleGetGamesData, false);
+    }
+
+    function initEvents() {
+      $buttonCompleteGame.addEventListener("click", handleCompleteGame, false);
+      $buttonClearGame.addEventListener("click", handleClearGame, false);
     }
 
     function init() {
       getGamesData();
-
-      $buttonCompleteGame.addEventListener("click", handleCompleteGame, false);
-      $buttonClearGame.addEventListener("click", handleClearGame, false);
+      initEvents();
     }
 
     init();
