@@ -37,82 +37,45 @@
 
       <section class="main-container">
         <main class="game-side">
-          <h2 class="primary-title"><strong>New bet</strong> for Mega-Sena</h2>
+          <h2 class="primary-title">
+            <strong>New bet</strong> for
+            <span data-js="game-name"></span>
+          </h2>
 
           <section class="choose-a-game">
             <h3 class="secondary-title">Choose a game</h3>
-
-            <ul class="games-type">
-              <li>
-                <button type="button" class="game-type" value="Lotofácil">
-                  Lotofácil
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  class="game-type game-type__selected"
-                  value="Mega-Sena"
-                >
-                  Mega-Sena
-                </button>
-              </li>
-              <li>
-                <button type="button" class="game-type" value="Lotomania">
-                  Lotomania
-                </button>
-              </li>
-            </ul>
+            <ul data-js="games-type" class="games-type"></ul>
           </section>
 
           <section class="fill-your-bet">
             <h3 class="secondary-title">Fill your bet</h3>
-
-            <p class="game-description">
-              Fill your bet Mark as many numbers as you want up to a maximum of
-              50. Win by hitting 15, 16, 17, 18, 19, 20 or none of the 20
-              numbers drawn.
-            </p>
-
-            <ul class="game-numbers">
-              <li class="game-number">
-                <button type="button" value="01">01</button>
-              </li>
-              <li class="game-number">
-                <button type="button" value="02">02</button>
-              </li>
-              <li class="game-number">
-                <button type="button" value="03">03</button>
-              </li>
-              <li class="game-number">
-                <button type="button" value="04">04</button>
-              </li>
-              <li class="game-number">
-                <button type="button" value="05">05</button>
-              </li>
-              <li class="game-number">
-                <button type="button" value="06">06</button>
-              </li>
-            </ul>
+            <p data-js="game-description" class="game-description"></p>
+            <ul data-js="game-numbers" class="game-numbers"></ul>
           </section>
 
           <section class="control-buttons">
             <div class="control-buttons__left-side">
               <button
                 type="button"
+                data-js="button__complete-game"
                 class="control-button control-button__outline"
               >
                 Complete game
               </button>
               <button
                 type="button"
+                data-js="button__clear-game"
                 class="control-button control-button__outline"
               >
                 Clear game
               </button>
             </div>
 
-            <button type="button" class="control-button control-button__filled">
+            <button
+              type="button"
+              data-js="button__add-to-cart"
+              class="control-button control-button__filled"
+            >
               <img src="./src/assets/shopping-cart-icon.svg" alt="Cart icon" />
               Add to cart
             </button>
@@ -126,7 +89,7 @@
                 <strong>Cart</strong>
               </h2>
 
-              <ul class="cart-games">
+              <ul data-js="cart-games" class="cart-games">
                 <li class="cart-game">
                   <button type="button" class="cart-game__delete-button">
                     <img src="./src/assets/trash-icon.svg" alt="Delete game" />
@@ -164,13 +127,22 @@
             <section class="cart-side__section">
               <h2 class="primary-title">
                 <strong>Cart</strong>
-                <span class="cart-games__total-price">total: R$ 7,00</span>
+                <span
+                  data-js="cart-games__total-price"
+                  class="cart-games__total-price"
+                >
+                  total: R$ 7,00
+                </span>
               </h2>
             </section>
           </div>
 
           <footer class="cart-side__footer">
-            <button type="button" class="cart__button-save">
+            <button
+              type="button"
+              data-js="button__save-cart"
+              class="cart__button-save"
+            >
               Save
               <img src="./src/assets/arrow-right-green-icon.svg" alt="Save" />
             </button>
@@ -182,5 +154,7 @@
         <p class="footer__copy">Copyright 2020 Luby Software</p>
       </footer>
     </div>
+
+    <script src="./src/js/index.js"></script>
   </body>
 </html>
