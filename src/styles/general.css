@@ -37,6 +37,11 @@ body,
   font-weight: 700;
 }
 
+.primary-title > span {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
 .secondary-title {
   font-size: 1.7rem;
   font-weight: 700;
