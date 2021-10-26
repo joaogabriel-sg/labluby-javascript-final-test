@@ -180,8 +180,21 @@
       };
     }
 
+    function showRemainingQuantity() {
+      const remainingQuantity =
+        selectedGame["max-number"] - selectedNumbers.length;
+      const numberWordString = remainingQuantity !== 1 ? "números" : "número";
+
+      alert(
+        `Cartela Incompleta\nFalta ${remainingQuantity} ${numberWordString} para selecionar.`
+      );
+    }
+
     function handleAddGameToCart() {
-      if (selectedNumbers.length !== selectedGame["max-number"]) return;
+      if (selectedNumbers.length !== selectedGame["max-number"]) {
+        showRemainingQuantity();
+        return;
+      }
 
       const newCartItem = getNewCartItem();
       cartGames.push(newCartItem);
