@@ -190,8 +190,18 @@
       );
     }
 
+    function getSelectedNumbersLengthAndGameMaxNumber() {
+      return {
+        numbersLength: selectedNumbers.length,
+        gameMaxNumber: selectedGame["max-number"],
+      };
+    }
+
     function handleAddGameToCart() {
-      if (selectedNumbers.length !== selectedGame["max-number"]) {
+      const { numbersLength, gameMaxNumber } =
+        getSelectedNumbersLengthAndGameMaxNumber();
+
+      if (numbersLength !== gameMaxNumber) {
         showRemainingQuantity();
         return;
       }
@@ -250,10 +260,18 @@
     }
 
     function handleSelectGameNumber(event) {
-      const selectedNumbersLength = selectedNumbers.length + 1;
-      const selectedGameTypeMaxNumber = selectedGame["max-number"];
+      const { numbersLength, gameMaxNumber } =
+        getSelectedNumbersLengthAndGameMaxNumber();
 
-      if (selectedNumbersLength > selectedGameTypeMaxNumber) return;
+      if (numbersLength >= gameMaxNumber) {
+        const articleWordString = gameMaxNumber !== 1 ? "os " : "";
+        const numberWordString = gameMaxNumber !== 1 ? "números" : "número";
+
+        alert(
+          `Ops... você já selecionou ${articleWordString}${gameMaxNumber} ${numberWordString}.\nPara poder selecionar outro número é necessário que você desselecione outro número.`
+        );
+        return;
+      }
 
       const $selectedButtonNumber = event.target;
       selectedNumbers.push($selectedButtonNumber.value);
@@ -405,8 +423,8 @@
     function handleGetGamesData() {
       if (!isRequestOk()) return;
 
-      const data = JSON.parse(ajax.responseText);
-      renderTypesOfGames(data.types);
+      const { types } = JSON.parse(ajax.responseText);
+      renderTypesOfGames(types);
       initGame();
     }
 
