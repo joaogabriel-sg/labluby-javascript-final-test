@@ -27,39 +27,6 @@
   cursor: pointer;
 }
 
-.games-type li:nth-child(1) .game-type {
-  border-color: #7f3992;
-  color: #7f3992;
-}
-
-.games-type li:nth-child(2) .game-type {
-  border-color: #01ac66;
-  color: #01ac66;
-}
-
-.games-type li:nth-child(3) .game-type {
-  border-color: #f79c31;
-  color: #f79c31;
-}
-
-.games-type li:nth-child(1) .game-type.game-type__selected,
-.games-type li:nth-child(1) .game-type:hover {
-  background: #7f3992;
-  color: #ffffff;
-}
-
-.games-type li:nth-child(2) .game-type.game-type__selected,
-.games-type li:nth-child(2) .game-type:hover {
-  background: #01ac66;
-  color: #ffffff;
-}
-
-.games-type li:nth-child(3) .game-type.game-type__selected,
-.games-type li:nth-child(3) .game-type:hover {
-  background: #f79c31;
-  color: #ffffff;
-}
-
 .game-description {
   width: 100%;
   max-width: 64.8rem;
@@ -80,7 +47,7 @@
   gap: 1.2rem;
 }
 
-.game-number > button {
+.game-number {
   background: #adc0c4;
   width: 6.4rem;
   height: 6.4rem;

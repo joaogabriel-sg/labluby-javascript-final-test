@@ -32,9 +32,14 @@ body,
   color: #707070;
 }
 
-.primary-title > strong {
+.primary-title strong {
   font-size: inherit;
   font-weight: 700;
+}
+
+.primary-title span {
+  font-size: inherit;
+  font-weight: inherit;
 }
 
 .secondary-title {

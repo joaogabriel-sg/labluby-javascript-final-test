@@ -38,14 +38,6 @@
   margin-left: 1.2rem;
 }
 
-.cart-game:nth-child(1) .cart-game__game-data {
-  border-color: #7f3992;
-}
-
-.cart-game:nth-child(2) .cart-game__game-data {
-  border-color: #27c383;
-}
-
 .cart-game__game-numbers {
   margin-bottom: 0.6rem;
 
@@ -53,6 +45,7 @@
   font-weight: 700;
   font-style: italic;
   line-height: 2rem;
+  word-break: break-all;
   color: #868686;
 }
 
@@ -60,14 +53,6 @@
   font-size: 1.6rem;
   font-weight: 700;
   font-style: italic;
-}
-
-.cart-game:nth-child(1) .cart-game__game-type {
-  color: #7f3992;
-}
-
-.cart-game:nth-child(2) .cart-game__game-type {
-  color: #27c383;
 }
 
 .cart-game__game-price {
