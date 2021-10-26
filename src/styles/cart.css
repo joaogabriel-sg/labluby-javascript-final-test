@@ -33,6 +33,24 @@
 
 .cart-games {
   list-style: none;
+  max-height: 30.4rem;
+  padding-right: 3.8rem;
+  overflow-y: auto;
+}
+
+.cart-games::-webkit-scrollbar {
+  background: transparent;
+  width: 0.4rem;
+  overflow: hidden;
+}
+
+.cart-games::-webkit-scrollbar {
+  background: transparent;
+}
+
+.cart-games::-webkit-scrollbar-thumb {
+  background: #868686;
+  border-radius: 0.4rem;
 }
 
 .cart-game {
