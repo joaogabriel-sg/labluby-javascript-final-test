@@ -12,6 +12,25 @@
   padding: 0 1.6rem;
 }
 
+.cart-empty-message {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #868686;
+  color: #ff7675;
+}
+
+.cart-empty-message > img {
+  width: 4rem;
+  margin-right: 1.6rem;
+}
+
 .cart-games {
   list-style: none;
 }

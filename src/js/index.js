@@ -6,11 +6,19 @@
     const $gameDescription = win.selectors.dqs('[data-js="game-description"]');
     const $gamesType = win.selectors.dqs('[data-js="games-type"]');
     const $gameNumbers = win.selectors.dqs('[data-js="game-numbers"]');
-    const $buttonCompleteGame = win.selectors.dqs('[data-js="button__complete-game"]');
-    const $buttonClearGame = win.selectors.dqs('[data-js="button__clear-game"]');
-    const $buttonAddToCart = win.selectors.dqs('[data-js="button__add-to-cart"]');
+    const $buttonCompleteGame = win.selectors.dqs(
+      '[data-js="button__complete-game"]'
+    );
+    const $buttonClearGame = win.selectors.dqs(
+      '[data-js="button__clear-game"]'
+    );
+    const $buttonAddToCart = win.selectors.dqs(
+      '[data-js="button__add-to-cart"]'
+    );
     const $cartGames = win.selectors.dqs('[data-js="cart-games"]');
-    const $cartGamesTotalPrice = win.selectors.dqs('[data-js="cart-games__total-price"]');
+    const $cartGamesTotalPrice = win.selectors.dqs(
+      '[data-js="cart-games__total-price"]'
+    );
 
     const ajax = new XMLHttpRequest();
 
@@ -118,8 +126,40 @@
       $cartGamesTotalPrice.textContent = formatCurrencyToBRL(totalPrice);
     }
 
+    function clearEmptyCartMessage() {
+      const $spanCartEmptyMessage = win.selectors.dqs(
+        '[data-js="cart-empty-message"]'
+      );
+
+      if ($spanCartEmptyMessage) $spanCartEmptyMessage.remove();
+    }
+
+    function showEmptyCartMessage() {
+      const $spanCartEmptyMessage = doc.createElement("span");
+      $spanCartEmptyMessage.classList.add("cart-empty-message");
+      $spanCartEmptyMessage.setAttribute("data-js", "cart-empty-message");
+
+      const $cartEmptyIcon = doc.createElement("img");
+      $cartEmptyIcon.src = "./src/assets/shopping-cart-empty-icon.svg";
+
+      const emptyText = doc.createTextNode("O carrinho está vazio...");
+
+      $spanCartEmptyMessage.appendChild($cartEmptyIcon);
+      $spanCartEmptyMessage.appendChild(emptyText);
+      $cartGames.parentNode.appendChild($spanCartEmptyMessage);
+    }
+
     function renderCart() {
       $cartGames.textContent = "";
+
+      if (!cartGames.length) {
+        showEmptyCartMessage();
+        updateCartTotalPrice();
+        return;
+      }
+
+      clearEmptyCartMessage();
+
       cartGames.forEach((cartGame) => {
         const $listItemCartGame = makeListItemCartGame(cartGame);
         $cartGames.appendChild($listItemCartGame);
@@ -137,12 +177,12 @@
         numbers: selectedNumbers,
         price: selectedGame.price,
         color: selectedGame.color,
-      }
+      };
     }
 
     function handleAddGameToCart() {
       if (selectedNumbers.length !== selectedGame["max-number"]) return;
-      
+
       const newCartItem = getNewCartItem();
       cartGames.push(newCartItem);
 
@@ -179,7 +219,9 @@
     function handleClearGame() {
       selectedNumbers = [];
 
-      const $allSelectedButtons = win.selectors.dqsa(`.${classGameNumberSelected}`);
+      const $allSelectedButtons = win.selectors.dqsa(
+        `.${classGameNumberSelected}`
+      );
       $allSelectedButtons.forEach((selectedButton) =>
         manageButtonNumberEventListeners(selectedButton, true)
       );
@@ -288,21 +330,23 @@
       return (buttonGameType) => {
         if (buttonGameType.classList.contains(classGameTypeSelected))
           buttonGameType.classList.remove(classGameTypeSelected);
-  
+
         if (buttonGameType.value === gameType) {
           selectedGame = getSelectedGameDataByType(gameType);
           changeToFillButton(buttonGameType);
           return;
         }
-  
+
         changeToOutlineButton(buttonGameType);
-      }
+      };
     }
 
     function handleChangeSelectedGameType(event) {
       const gameType = event.target.value;
       const $buttonsTypesOfGames = win.selectors.dqsa('[data-js="game-type"]');
-      $buttonsTypesOfGames.forEach(handleChangeSelectedGameAndClasses(gameType));
+      $buttonsTypesOfGames.forEach(
+        handleChangeSelectedGameAndClasses(gameType)
+      );
 
       initGame();
     }
