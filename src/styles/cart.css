@@ -1,0 +1,99 @@
+.cart-side {
+  background: #ffffff;
+  width: 100%;
+  border: 0.1rem solid #e2e2e2;
+  border-radius: 1rem;
+  overflow: hidden;
+
+  align-self: flex-start;
+}
+
+.cart-side__content {
+  padding: 0 1.6rem;
+}
+
+.cart-games {
+  list-style: none;
+}
+
+.cart-game {
+  display: flex;
+  align-items: center;
+}
+
+.cart-game + .cart-game {
+  margin-top: 3.2rem;
+}
+
+.cart-game__delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.cart-game__game-data {
+  padding: 0.8rem 0 0.8rem 1.2rem;
+  border-left: 0.4rem solid;
+  border-radius: 0.4rem 0 0 0.4rem;
+  margin-left: 1.2rem;
+}
+
+.cart-game__game-numbers {
+  margin-bottom: 0.6rem;
+
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-style: italic;
+  line-height: 2rem;
+  word-break: break-all;
+  color: #868686;
+}
+
+.cart-game__game-type {
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.cart-game__game-price {
+  margin-left: 1.4rem;
+
+  font-size: 1.6rem;
+  color: #868686;
+}
+
+.cart-games__total-price {
+  font-size: inherit;
+  font-style: normal;
+  text-transform: inherit;
+}
+
+.cart-side__footer {
+  width: 100%;
+}
+
+.cart__button-save {
+  background: #f4f4f4;
+  width: 100%;
+  height: 9.6rem;
+
+  border: none;
+  border-top: 0.1rem solid #e2e2e2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 3.5rem;
+  font-weight: 700;
+  font-style: italic;
+  color: #27c383;
+
+  cursor: pointer;
+}
+
+.cart__button-save > img {
+  width: 3.2rem;
+  height: auto;
+  margin-left: 1.8rem;
+}

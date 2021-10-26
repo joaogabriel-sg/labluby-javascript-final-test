@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A repository to store LabLuby's final JavaScript test code."
+    />
+    <meta name="author" content="João Gabriel Silva Gomes" />
+    <title>TGL</title>
+    <link rel="stylesheet" href="./src/styles/index.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="header-container">
+        <nav class="header-content">
+          <h1 class="logo">TGL</h1>
+
+          <ul class="menu">
+            <li class="menu-item">
+              <a href="#" class="menu-item__link">Home</a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-item__link">Account</a>
+            </li>
+            <li class="menu-item">
+              <a href="#" class="menu-item__link">
+                Log out
+                <img src="./src/assets/arrow-right-icon.svg" alt="Log out" />
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+
+      <section class="main-container">
+        <main class="game-side">
+          <h2 class="primary-title">
+            <strong>New bet</strong> for
+            <span data-js="game-name"></span>
+          </h2>
+
+          <section class="choose-a-game">
+            <h3 class="secondary-title">Choose a game</h3>
+            <ul data-js="games-type" class="games-type"></ul>
+          </section>
+
+          <section class="fill-your-bet">
+            <h3 class="secondary-title">Fill your bet</h3>
+            <p data-js="game-description" class="game-description"></p>
+            <ul data-js="game-numbers" class="game-numbers"></ul>
+          </section>
+
+          <section class="control-buttons">
+            <div class="control-buttons__left-side">
+              <button
+                type="button"
+                data-js="button__complete-game"
+                class="control-button control-button__outline"
+              >
+                Complete game
+              </button>
+              <button
+                type="button"
+                data-js="button__clear-game"
+                class="control-button control-button__outline"
+              >
+                Clear game
+              </button>
+            </div>
+
+            <button
+              type="button"
+              data-js="button__add-to-cart"
+              class="control-button control-button__filled"
+            >
+              <img src="./src/assets/shopping-cart-icon.svg" alt="Cart icon" />
+              Add to cart
+            </button>
+          </section>
+        </main>
+
+        <aside class="cart-side">
+          <div class="cart-side__content">
+            <section class="cart-side__section">
+              <h2 class="primary-title">
+                <strong>Cart</strong>
+              </h2>
+
+              <ul data-js="cart-games" class="cart-games"></ul>
+            </section>
+
+            <section class="cart-side__section">
+              <h2 class="primary-title">
+                <strong>Cart</strong>
+                <span class="cart-games__total-price">
+                  total: <span data-js="cart-games__total-price"></span>
+                </span>
+              </h2>
+            </section>
+          </div>
+
+          <footer class="cart-side__footer">
+            <button
+              type="button"
+              data-js="button__save-cart"
+              class="cart__button-save"
+            >
+              Save
+              <img src="./src/assets/arrow-right-green-icon.svg" alt="Save" />
+            </button>
+          </footer>
+        </aside>
+      </section>
+
+      <footer class="footer-container">
+        <p class="footer__copy">Copyright 2020 Luby Software</p>
+      </footer>
+    </div>
+
+    <script src="./src/js/formatCurrencyToBRL.js"></script>
+    <script src="./src/js/selectors.js"></script>
+    <script src="./src/js/index.js"></script>
+  </body>
+</html>
