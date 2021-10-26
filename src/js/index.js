@@ -1,21 +1,16 @@
-((doc) => {
+((doc, win) => {
   "use strict";
 
   function app() {
-    const dqs = (selector) => doc.querySelector(selector);
-    const dqsa = (selector) => [...doc.querySelectorAll(selector)];
-
-    const $gameName = dqs('[data-js="game-name"]');
-    const $gameDescription = dqs('[data-js="game-description"]');
-    const $gamesType = dqs('[data-js="games-type"]');
-    const $gameNumbers = dqs('[data-js="game-numbers"]');
-
-    const $buttonCompleteGame = dqs('[data-js="button__complete-game"]');
-    const $buttonClearGame = dqs('[data-js="button__clear-game"]');
-    const $buttonAddToCart = dqs('[data-js="button__add-to-cart"]');
-
-    const $cartGames = dqs('[data-js="cart-games"]');
-    const $cartGamesTotalPrice = dqs('[data-js="cart-games__total-price"]');
+    const $gameName = win.selectors.dqs('[data-js="game-name"]');
+    const $gameDescription = win.selectors.dqs('[data-js="game-description"]');
+    const $gamesType = win.selectors.dqs('[data-js="games-type"]');
+    const $gameNumbers = win.selectors.dqs('[data-js="game-numbers"]');
+    const $buttonCompleteGame = win.selectors.dqs('[data-js="button__complete-game"]');
+    const $buttonClearGame = win.selectors.dqs('[data-js="button__clear-game"]');
+    const $buttonAddToCart = win.selectors.dqs('[data-js="button__add-to-cart"]');
+    const $cartGames = win.selectors.dqs('[data-js="cart-games"]');
+    const $cartGamesTotalPrice = win.selectors.dqs('[data-js="cart-games__total-price"]');
 
     const ajax = new XMLHttpRequest();
 
@@ -26,13 +21,6 @@
     let selectedGame = null;
     let selectedNumbers = [];
     let cartGames = [];
-
-    function formatCurrencyToBRL(currency) {
-      return Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(currency);
-    }
 
     function deleteCartItemById(id) {
       cartGames = cartGames.filter((cartGame) => cartGame.id !== id);
@@ -71,7 +59,7 @@
     function makeSpanGamePrice(cartGame) {
       const $spanGamePrice = doc.createElement("span");
       $spanGamePrice.classList.add("cart-game__game-price");
-      $spanGamePrice.textContent = formatCurrencyToBRL(cartGame.price);
+      $spanGamePrice.textContent = win.formatCurrencyToBRL(cartGame.price);
 
       return $spanGamePrice;
     }
@@ -137,40 +125,50 @@
         $cartGames.appendChild($listItemCartGame);
       });
 
+      handleClearGame();
       updateCartTotalPrice();
     }
 
-    function handleAddGameToCart() {
-      if (selectedNumbers.length !== selectedGame["max-number"]) return;
-
+    function getNewCartItem() {
       const newCartItemId = Math.floor(Math.random() * 10000) + 1;
-      const newCartItem = {
+      return {
         id: newCartItemId,
         type: selectedGame.type,
         numbers: selectedNumbers,
         price: selectedGame.price,
         color: selectedGame.color,
-      };
+      }
+    }
 
+    function handleAddGameToCart() {
+      if (selectedNumbers.length !== selectedGame["max-number"]) return;
+      
+      const newCartItem = getNewCartItem();
       cartGames.push(newCartItem);
 
       renderCart();
-      handleClearGame();
+    }
+
+    function formatNumber(number) {
+      return `${number}`.padStart(2, "0");
+    }
+
+    function insertNewNumberIntoSelectedNumbers() {
+      const number = Math.floor(Math.random() * selectedGame.range) + 1;
+      const stringifiedNumber = formatNumber(number);
+
+      const wasFound = selectedNumbers.find(
+        (selectedNumber) => selectedNumber === stringifiedNumber
+      );
+
+      if (!wasFound) selectedNumbers.push(stringifiedNumber);
     }
 
     function handleCompleteGame() {
-      while (selectedNumbers.length < selectedGame["max-number"]) {
-        const number = Math.floor(Math.random() * selectedGame.range) + 1;
-        const stringifiedNumber = `${number}`.padStart(2, "0");
+      while (selectedNumbers.length < selectedGame["max-number"])
+        insertNewNumberIntoSelectedNumbers();
 
-        const wasFound = selectedNumbers.find(
-          (selectedNumber) => selectedNumber === stringifiedNumber
-        );
-
-        if (!wasFound) selectedNumbers.push(stringifiedNumber);
-      }
-
-      const $allGameButtons = dqsa('[data-js="game-number"]');
+      const $allGameButtons = win.selectors.dqsa('[data-js="game-number"]');
       $allGameButtons.forEach((button) =>
         selectedNumbers.includes(button.value)
           ? manageButtonNumberEventListeners(button, false)
@@ -181,7 +179,7 @@
     function handleClearGame() {
       selectedNumbers = [];
 
-      const $allSelectedButtons = dqsa(`.${classGameNumberSelected}`);
+      const $allSelectedButtons = win.selectors.dqsa(`.${classGameNumberSelected}`);
       $allSelectedButtons.forEach((selectedButton) =>
         manageButtonNumberEventListeners(selectedButton, true)
       );
@@ -251,7 +249,7 @@
 
       const range = selectedGame.range;
       Array.from({ length: range }, (_, index) =>
-        `${index + 1}`.padStart(2, "0")
+        formatNumber(index + 1)
       ).forEach(handleRenderGameNumber);
     }
 
@@ -275,28 +273,36 @@
       return games.find(({ type }) => type === gameType);
     }
 
-    function handleChangeSelectedGameType(event) {
-      const gameType = event.target.value;
-      const $buttonsTypesOfGames = dqsa('[data-js="game-type"]');
+    function changeToFillButton(button) {
+      button.classList.add(classGameTypeSelected);
+      button.style.background = button.getAttribute("data-color");
+      button.style.color = "#ffffff";
+    }
 
-      $buttonsTypesOfGames.forEach((buttonGameType) => {
+    function changeToOutlineButton(button) {
+      button.style.background = "transparent";
+      button.style.color = button.getAttribute("data-color");
+    }
+
+    function handleChangeSelectedGameAndClasses(gameType) {
+      return (buttonGameType) => {
         if (buttonGameType.classList.contains(classGameTypeSelected))
           buttonGameType.classList.remove(classGameTypeSelected);
-
+  
         if (buttonGameType.value === gameType) {
           selectedGame = getSelectedGameDataByType(gameType);
-
-          buttonGameType.style.background =
-            buttonGameType.getAttribute("data-color");
-          buttonGameType.style.color = "#ffffff";
-
-          buttonGameType.classList.add(classGameTypeSelected);
-        } else {
-          buttonGameType.style.background = "transparent";
-          buttonGameType.style.color =
-            buttonGameType.getAttribute("data-color");
+          changeToFillButton(buttonGameType);
+          return;
         }
-      });
+  
+        changeToOutlineButton(buttonGameType);
+      }
+    }
+
+    function handleChangeSelectedGameType(event) {
+      const gameType = event.target.value;
+      const $buttonsTypesOfGames = win.selectors.dqsa('[data-js="game-type"]');
+      $buttonsTypesOfGames.forEach(handleChangeSelectedGameAndClasses(gameType));
 
       initGame();
     }
@@ -323,10 +329,7 @@
 
       if (index === 0) {
         selectedGame = getSelectedGameDataByType(game.type);
-        $buttonGameType.classList.add(classGameTypeSelected);
-        $buttonGameType.style.background =
-          $buttonGameType.getAttribute("data-color");
-        $buttonGameType.style.color = "#ffffff";
+        changeToFillButton($buttonGameType);
       }
 
       $listItemGameType.appendChild($buttonGameType);
@@ -372,4 +375,4 @@
   }
 
   app();
-})(document);
+})(document, window);
